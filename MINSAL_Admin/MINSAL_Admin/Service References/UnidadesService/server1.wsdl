@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://localhost/minsal-admin-service/" xmlns:s="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost/minsal-admin-service/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema targetNamespace="http://localhost/minsal-admin-service/">
+      <s:complexType name="UnidadOrganizacional">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id_unidad_organizacional" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="unidad_padre" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="nombre" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="departamento" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="activa" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="tiene_transporte" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="padre" nillable="true" type="tns:UnidadOrganizacional" />
+          <s:element minOccurs="1" maxOccurs="1" name="hijos" nillable="true" type="tns:UnidadOrganizacionalArray" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UnidadOrganizacionalArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:attribute wsdl:arrayType="tns:UnidadOrganizacional[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getDumpUnidadSoapIn" />
+  <wsdl:message name="getDumpUnidadSoapOut">
+    <wsdl:part name="return" type="tns:UnidadOrganizacional" />
+  </wsdl:message>
+  <wsdl:message name="recuperarUnidadesSoapIn" />
+  <wsdl:message name="recuperarUnidadesSoapOut">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="recuperarUnidadSoapIn">
+    <wsdl:part name="id" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="recuperarUnidadSoapOut">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="crearUnidadSoapIn">
+    <wsdl:part name="nombre" type="s:string" />
+    <wsdl:part name="direccion" type="s:string" />
+    <wsdl:part name="transporte" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="crearUnidadSoapOut">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="asignarPadreSoapIn">
+    <wsdl:part name="id" type="s:int" />
+    <wsdl:part name="id_padre" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="asignarPadreSoapOut">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="asignarActivaSoapIn">
+    <wsdl:part name="id" type="s:int" />
+    <wsdl:part name="activa" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="asignarActivaSoapOut">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:portType name="UnidadesServiceSoap">
+    <wsdl:operation name="getDumpUnidad">
+      <wsdl:documentation>
+                MÃ©todo para mapear el objeto.
+            </wsdl:documentation>
+      <wsdl:input message="tns:getDumpUnidadSoapIn" />
+      <wsdl:output message="tns:getDumpUnidadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="recuperarUnidades">
+      <wsdl:documentation>
+                Recuperar todas las unidades organizacionales
+            </wsdl:documentation>
+      <wsdl:input message="tns:recuperarUnidadesSoapIn" />
+      <wsdl:output message="tns:recuperarUnidadesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="recuperarUnidad">
+      <wsdl:documentation>
+                Recuperar una unidad organizacional
+            </wsdl:documentation>
+      <wsdl:input message="tns:recuperarUnidadSoapIn" />
+      <wsdl:output message="tns:recuperarUnidadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="crearUnidad" parameterOrder="nombre direccion transporte">
+      <wsdl:documentation>
+                Crear una unidad
+            </wsdl:documentation>
+      <wsdl:input message="tns:crearUnidadSoapIn" />
+      <wsdl:output message="tns:crearUnidadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="asignarPadre" parameterOrder="id id_padre">
+      <wsdl:documentation>
+                Asignar padre
+            </wsdl:documentation>
+      <wsdl:input message="tns:asignarPadreSoapIn" />
+      <wsdl:output message="tns:asignarPadreSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="asignarActiva" parameterOrder="id activa">
+      <wsdl:documentation>
+                Asignar activa
+            </wsdl:documentation>
+      <wsdl:input message="tns:asignarActivaSoapIn" />
+      <wsdl:output message="tns:asignarActivaSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UnidadesServiceSoap" type="tns:UnidadesServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="getDumpUnidad">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/getDumpUnidad" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="recuperarUnidades">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/recuperarUnidades" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="recuperarUnidad">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/recuperarUnidad" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="id" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="crearUnidad">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/crearUnidad" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="nombre direccion transporte" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="asignarPadre">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/asignarPadre" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="id id_padre" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="asignarActiva">
+      <soap:operation soapAction="http://localhost/minsal-admin-service/asignarActiva" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="id activa" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://localhost/minsal-admin-service/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" parts="return" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UnidadesService">
+    <wsdl:port name="UnidadesServiceSoap" binding="tns:UnidadesServiceSoap">
+      <soap:address location="http://localhost/minsal-admin-service/index.php/server" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
